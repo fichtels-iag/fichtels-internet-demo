@@ -30,6 +30,9 @@ def get_all_messages():
 
 
 def add_data(message: str):
+    if len(message) > 255:
+        message = message[0:255]
+        message += '...'
     con = sqlite3.connect('data.db')
     cur = con.cursor()
     create_table(con, cur)
