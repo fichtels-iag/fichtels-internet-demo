@@ -10,3 +10,7 @@ h2 {
 .platzhalter {
     height: 100px
 }
+.zeit {
+    font-style: italic;
+    font-size: 0.8em;
+}

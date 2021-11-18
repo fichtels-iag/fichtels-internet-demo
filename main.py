@@ -1,31 +1,33 @@
-from flask import Flask, send_from_directory
+import os
+
+from flask import Flask, send_from_directory, render_template, request
+
+from database import create_table, get_all_messages, add_data
 
 app = Flask(__name__, static_url_path='')
 
 
 @app.route("/")
 def index():
-    return send_from_directory('html', 'index.html')
+    return render_template('index.html', messages=get_all_messages())
 
-@app.route("/1")
+
+@app.route("/statisch")
 def send_static():
-    return send_from_directory('html', 'static.html')
+    return render_template('static.html', messages=get_all_messages())
 
-@app.route("/2")
+
+@app.route('/interaktion', methods=['POST', 'GET'])
 def send_interaction():
-    return send_from_directory('html', 'interaction.html')
-
-@app.route("/3")
-def send_dynamic():
-    return send_from_directory('html', 'dynamic.html')
-
-@app.route('/functions.js')
-def send_js():
-    return send_from_directory('html', 'functions.js')
+    if request.method == 'POST':
+        form_data = request.form
+        add_data(form_data['message'])
+    return render_template('interaction.html', messages=get_all_messages())
 
 @app.route('/style.css')
 def send_css():
-    return send_from_directory('html', 'style.css')
+    return send_from_directory('static', 'style.css')
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80)
